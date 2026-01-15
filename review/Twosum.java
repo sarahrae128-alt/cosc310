@@ -22,4 +22,15 @@ public class Twosum {
 
     }
 
+    public static void main(String[] args) {
+        Twosum ts = new Twosum();
+        int[] nums = new int[] {4,6,2,1,7};
+        /*int[] nums = new int[5];
+        nums[0] = 4;*/
+        int[] result = ts.twoSum(nums, 9);
+        System.out.println(java.util.Arrays.toString(result));
+        
+
+
+    }
 }
