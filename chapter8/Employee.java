@@ -7,7 +7,7 @@ abstract public class Employee  extends Person{
     }
     
     @Override
-    public String getType() {
+    public String getType(){
         return "Employee";
     }
 }
