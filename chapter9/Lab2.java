@@ -2,6 +2,8 @@ package chapter9;
 
 import java.nio.channels.Pipe.SourceChannel;
 
+import my.util.DLinkedList;
+
 public class Lab2 {
 
     public static void main(String[] args) {
@@ -23,6 +25,14 @@ public class Lab2 {
         }
         airports.pop();
 
+        DLinkedList<String> list = new DLinkedList<>();
+        System.out.println(list);
+        list.add("BHM");
+        System.out.println(list);
+        list.add("ATL");
+        System.out.println(list);
+        list.add("MSP");
+        System.out.println(list);
 
     }
 
