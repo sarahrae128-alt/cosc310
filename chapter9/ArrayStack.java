@@ -3,13 +3,14 @@ package chapter9;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-public class ArrayStack<T> implements Stack<T> {
+public class ArrayStack<T> implements Stack<T>, Comparable<Stack<T>> {
 
     ArrayList<T> data = new ArrayList<>();
 
     /****
-     * designate the end of the array list as the top of stack
-     * @param d - one peice of data we want to add to the stack  
+     * Designate the "end" of the arraylist as the top of stack.
+     * 
+     * @param d - one piece of data we want to add to the stack
      */
     @Override
     public void push(T d) {
@@ -17,19 +18,19 @@ public class ArrayStack<T> implements Stack<T> {
     }
 
     @Override
-    public T pop() {
-        if (isEmpty()){
+    public T pop() throws Exception {
+        if (isEmpty()) {
             throw new EmptyStackException();
         }
-        return data.removeLast();
+        return data.remove(data.size()-1);
     }
 
     @Override
-    public T top() {
-        if (isEmpty()){
+    public T top() throws Exception {
+        if (isEmpty()) {
             throw new EmptyStackException();
         }
-        return data.getLast();
+        return data.get(data.size()-1);
     }
 
     @Override
@@ -44,12 +45,22 @@ public class ArrayStack<T> implements Stack<T> {
 
     @Override
     public String toString() {
-        if( isEmpty()){
-            return "ArrayStack [data=" + data + ", top()= EMPTY, size()=" + size() + "]";
-        }else{
-            return "ArrayStack [data=" + data + ", top()=" + top() + ", size()=" + size() + "]";
+        if (isEmpty()) {
+            return "ArrayStack [data=" + data + ", top()=EMPTY, size()=" + size() + "]";
+        } else {
+            try {
+                return "ArrayStack [data=" + data + ", top()=" + top() + ", size()=" + size() + "]";
+            } catch (EmptyStackException ex) {
+                return "ArrayStack [data=" + data + ", top()= EMPTY, size()=" + size() + "]";
+            } catch (Exception ex) {
+                return "Something really bad happened to your stack";
+            }
         }
     }
 
-    
+    @Override
+    public int compareTo(Stack<T> o) {
+        return size()-o.size();
+    }
+
 }
