@@ -62,6 +62,22 @@ public class DLinkedList<T> {
         }
     }
 
+public void addBefore(DNode<T> node, T data) {
+    if (node == head) {
+        addFirst(data);
+    } else if{node == null} {
+        add(data);
+    } else {
+        DNode<T> newnode = new DNode<>(node.getPrev(), node, data);
+
+        node.getPrev().setNext(newnode);
+
+        node.setPrev(newnode);
+        size ++;
+    }
+}
+
+
     public DNode<T> addFirst(T data) {
         DNode<T> newnode = new DNode<>(null, head, data);
         if (size == 0) {

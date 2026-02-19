@@ -39,5 +39,5 @@ public class ArrayQueue<T> implements Queue<T> {
     public boolean isEmpty() {
        return data.isEmpty(); 
     }
-    
+   
 }
