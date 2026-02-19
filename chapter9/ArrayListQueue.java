@@ -1,6 +1,7 @@
 package chapter9;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 public class ArrayListQueue<T> implements Queue<T> {
 
@@ -28,7 +29,10 @@ public class ArrayListQueue<T> implements Queue<T> {
 
     @Override
     public T dequeue() throws Exception {
-        // TODO - check for empty queue
+        // Done - check for empty queue
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
         T item = buffer.get(head);
         size--;
         head = (head + 1) % buffer.size();
@@ -37,7 +41,10 @@ public class ArrayListQueue<T> implements Queue<T> {
 
     @Override
     public T front() throws Exception {
-        // TODO
+        // DONE
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
         return buffer.get(head);
     }
 
@@ -52,7 +59,7 @@ public class ArrayListQueue<T> implements Queue<T> {
     }
 
     private void ensureCapacity() {
-        // TODO: if needed > buffer.size(), double capacity and re-center head at 0
+        // DONE: if needed > buffer.size(), double capacity and re-center head at 0
         if (size < buffer.size())
             return;
 

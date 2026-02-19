@@ -54,13 +54,19 @@ public class SortedDLinkedListPriorityQueue<T> implements PriorityQueue<T> {
 
     @Override
     public T dequeue() throws Exception {
-        // TODO: removeFirst()
+        // DONE: removeFirst()
+        if (isEmpty()) {
+            throw new Exception("PriorityQueue is empty");
+        }
         return list.removeFirst().getData().data;
     }
 
     @Override
     public T front() throws Exception {
-        // TODO: peek head
+        // DONE: peek head
+        if (isEmpty()) {
+            throw new Exception("PriorityQueue is empty");
+        }
         return list.get(0).getData().data;
     }
 
