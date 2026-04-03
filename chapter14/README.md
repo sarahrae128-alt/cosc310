@@ -12,7 +12,7 @@ In these four JSON files Dr. Toone has recorded his biking data collected over a
 ## Problem 1: What was the rider's peak power moment of the week?
 
 ### Problem Definition
-My goal for this question was to find the single moment where Dr. Toone performed his best across the entire week. As a well-seasoned cyclist, I was curious about when he hit his peak output — specifically his maximum power and what his speed looked like at that moment. Power (watts) is the most direct measure of effort on a bike, so sorting by power and grabbing the top record would give me a clear answer.
+My goal for this question was to find the single moment where Dr. Toone performed his best across the entire week. As a well seasoned cyclist, I was curious about when he hit his peak output, specifically his maximum power and what his speed looked like at that moment. Power (watts) is the most direct measure of effort on a bike, so sorting by power and grabbing the top record would give me a clear answer.
 
 ### Algorithm Choice — Merge Sort
 **Algorithm:** Merge Sort (`Sorting.mergeSort`)
@@ -44,14 +44,14 @@ Top 5 highest power records:
 ```
 
 ### Interpretation
-At the peak power moment, Dr. Toone achieved a speed of 38 kph, producing 705 watts at a cadence of 97 rpm. These results illustrate that a sprint was performed rather than a climb. It should be noted that the heart rate was rather low at 107 bpm for such high output. This is because the cardiovascular system lags when a sudden burst of exercise happens — the heart simply had not caught up to the effort yet.
+At the peak power moment, Dr. Toone achieved a speed of 38 kph, producing 705 watts at a cadence of 97 rpm. These results illustrate that a sprint was performed rather than a climb. It should be noted that the heart rate was rather low at 107 bpm for such high output. This is because the cardiovascular system lags when a sudden burst of exercise happens, the heart simply had not caught up to the effort yet.
 
 ---
 
 ## Problem 2: When did the rider show signs of fatigue?
 
 ### Problem Definition
-For question 2, I was interested in finding when Dr. Toone might have gotten tired during the week. I researched what the data would look like to indicate fatigue and found that it typically shows up as a slowing speed combined with a rising heart rate — the body working harder while losing pace. Just like question 1, I wanted to pinpoint the single strongest moment where the cyclist experienced fatigue across all four days.
+For question 2, I was interested in finding when Dr. Toone might have gotten tired during the week. I researched what the data would look like to indicate fatigue and found that it typically shows up as a slowing speed combined with a rising heart rate, the body working harder while losing pace. Just like question 1, I wanted to pinpoint the single strongest moment where the cyclist experienced fatigue across all four days.
 
 ### Algorithm Choice — Merge Sort + Binary Search
 **Algorithms:** Merge Sort (`Sorting.mergeSort`) + Binary Search (`Searching.binarySearch`)
@@ -74,7 +74,7 @@ Strongest fatigue moment:
 ```
 
 ### Interpretation
-From the results we can tell that Dr. Toone was able to keep a steady pace and largely avoid fatigue throughout the week. Only 3 records crossed the 150 bpm heart rate threshold across all 223,983 records, which tells us he stayed in a comfortable endurance zone the entire time. Since so few records display fatigue characteristics, it is possible that something else caused the speed drops. The strongest fatigue signal showed a speed drop of 2.286 m/s with only a 2 bpm heart rate rise — such a small HR increase suggests the slowdown was more likely caused by an external factor like a stop sign or traffic rather than the rider actually getting tired.
+From the results we can tell that Dr. Toone was able to keep a steady pace and largely avoid fatigue throughout the week. Only 3 records crossed the 150 bpm heart rate threshold across all 223,983 records, which tells us he stayed in a comfortable endurance zone the entire time. Since so few records display fatigue characteristics, it is possible that something else caused the speed drops. The strongest fatigue signal showed a speed drop of 2.286 m/s with only a 2 bpm heart rate rise, such a small HR increase suggests the slowdown was more likely caused by an external factor like a stop sign or traffic rather than the rider actually getting tired.
 
 ---
 
