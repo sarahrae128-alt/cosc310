@@ -5,22 +5,22 @@
 
 ## The Dataset
 
-Four JSON files covering four days of cycling activity, each containing thousands of GPS track point records. Combined, the dataset totals **223,983 records**. Each record captures a snapshot in time including timestamp, distance, heart rate, speed, altitude, latitude, longitude, power output, cadence, temperature, and radar vehicle data.
+In these four JSON files Dr. Toone has recorded his biking data collected over a four day span. In total there are 223,983 records. These records contain data on timestamp, distance, heart rate, speed, altitude, latitude, longitude, power output, cadence, temperature, and radar vehicle data.
 
 ---
 
 ## Problem 1: What was the rider's peak power moment of the week?
 
 ### Problem Definition
-Power output (measured in watts) is one of the most direct indicators of cycling effort. A high power moment represents the single hardest physical effort the rider produced — whether a sprint, a punchy climb, or an aggressive acceleration. The goal is to find that single peak moment across all four days and describe the full context of what was happening at that instant.
+My goal for this question was to find the single moment where Dr. Toone performed his best across the entire week. As a well-seasoned cyclist, I was curious about when he hit his peak output — specifically his maximum power and what his speed looked like at that moment. Power (watts) is the most direct measure of effort on a bike, so sorting by power and grabbing the top record would give me a clear answer.
 
 ### Algorithm Choice — Merge Sort
 **Algorithm:** Merge Sort (`Sorting.mergeSort`)
 **Sort criteria:** `sortCriteria = 7` (power in watts)
 **Time complexity:** O(n log n)
-**Space complexity:** O(n) — requires a second list during the merge step
+**Space complexity:** O(n)
 
-Merge sort was chosen because it handles large datasets efficiently and is stable, meaning records with equal power values maintain their relative order. With nearly 224,000 records, a quadratic algorithm like selection or bubble sort would be far too slow. After sorting ascending by power, the peak record sits at the last index (`size() - 1`).
+Both algorithms sort the data, but merge sort is far faster. Merge sort begins by repeatedly cutting the data in half to reach the desired target. Bubble sort compares every record to every other record, which is an expensive process. With 224,000 records, merge sort performs roughly 3.8 million comparisons versus bubble sort's 50 billion — making merge sort the clear choice for a dataset this size. After sorting ascending by power, the peak record sits at the last index (`size() - 1`).
 
 ### Results
 
@@ -44,24 +44,21 @@ Top 5 highest power records:
 ```
 
 ### Interpretation
-The peak power moment of the week was **705 watts** at a speed of **38 kph**, with a cadence of 97 rpm. This combination — high speed, high cadence, and peak power — is consistent with a sprint effort rather than a grinding climb. Notably, the heart rate at that moment was only 107 bpm, which seems low for such high output. This is expected: heart rate always lags physical effort by roughly 15–30 seconds, so the cardiovascular response hadn't fully caught up to the burst yet. The second highest effort (697W) shows a higher HR of 113 bpm at a lower speed, suggesting a more sustained effort like a headwind or hill.
+At the peak power moment, Dr. Toone achieved a speed of 38 kph, producing 705 watts at a cadence of 97 rpm. These results illustrate that a sprint was performed rather than a climb. It should be noted that the heart rate was rather low at 107 bpm for such high output. This is because the cardiovascular system lags when a sudden burst of exercise happens — the heart simply had not caught up to the effort yet.
 
 ---
 
 ## Problem 2: When did the rider show signs of fatigue?
 
 ### Problem Definition
-Fatigue during a ride typically shows up as a combination of slowing speed and a rising heart rate — the body is working harder to maintain (or even losing) pace. The goal is to find when this pattern occurred across the week, and identify the single strongest fatigue signal moment.
+For question 2, I was interested in finding when Dr. Toone might have gotten tired during the week. I researched what the data would look like to indicate fatigue and found that it typically shows up as a slowing speed combined with a rising heart rate — the body working harder while losing pace. Just like question 1, I wanted to pinpoint the single strongest moment where the cyclist experienced fatigue across all four days.
 
 ### Algorithm Choice — Merge Sort + Binary Search
 **Algorithms:** Merge Sort (`Sorting.mergeSort`) + Binary Search (`Searching.binarySearch`)
-**Time complexity:** O(n log n) for sort, O(log n) for each binary search
+**Time complexity:** O(n log n) for sort, O(log n) for binary search
 **Space complexity:** O(n)
 
-The approach uses two passes:
-1. **Merge sort by timestamp** (`sortCriteria = 0`) to put all records in chronological order — required before any meaningful fatigue pattern scan.
-2. **Binary search by heart rate threshold** (`index = 2`, threshold = 150 bpm) to efficiently locate the region of the dataset where the rider was working at high intensity. This is O(log n) rather than scanning all 223,983 records linearly.
-3. A sequential scan of adjacent chronological records then identifies moments where speed dropped more than 0.5 m/s and HR rose by 2+ bpm simultaneously.
+To answer this question, merge sort and binary search were both used. Merge sort was used first to put all records in chronological order so the fatigue pattern could be scanned sequentially. Binary search was then used to find where heart rate crossed a threshold of 150 bpm. Binary search is faster than looping through each and every record because of its ability to split the data in half over and over again to find the target — only needing about 17 jumps through 224,000 records rather than checking every single one. Finally, a sequential scan compared each pinpointed record to its neighboring records to identify the fatigue pattern of dropping speed and rising heart rate.
 
 ### Results
 
@@ -77,11 +74,7 @@ Strongest fatigue moment:
 ```
 
 ### Interpretation
-Two findings stand out. First, the binary search for HR >= 150 bpm returned only **3 records** across the entire week. This tells us the rider stayed almost entirely in an aerobic endurance zone — never really pushing into high-intensity territory. This is typical of a multi-day touring ride where pacing matters more than performance.
-
-Second, the 260 fatigue signal moments show that speed fluctuated with minor HR rises frequently throughout the week. The strongest single moment shows a speed drop of **2.286 m/s (~8 kph)** with only a 2 bpm HR increase. The small HR rise suggests this was more likely a terrain event — a steep hill, a stop sign, or traffic — rather than deep physiological fatigue. If the rider were truly exhausted, we would expect a much larger HR rise accompanying the speed drop.
-
-**Conclusion:** The data suggests this was a well-paced endurance week. The rider never pushed hard enough to accumulate significant fatigue, and speed drops were driven more by terrain and external conditions than by the body breaking down.
+From the results we can tell that Dr. Toone was able to keep a steady pace and largely avoid fatigue throughout the week. Only 3 records crossed the 150 bpm heart rate threshold across all 223,983 records, which tells us he stayed in a comfortable endurance zone the entire time. Since so few records display fatigue characteristics, it is possible that something else caused the speed drops. The strongest fatigue signal showed a speed drop of 2.286 m/s with only a 2 bpm heart rate rise — such a small HR increase suggests the slowdown was more likely caused by an external factor like a stop sign or traffic rather than the rider actually getting tired.
 
 ---
 
@@ -91,6 +84,6 @@ Second, the 260 fatigue signal moments show that speed fluctuated with minor HR 
 |---|---|---|---|
 | Merge Sort | Sort 223,983 records by power (Q1) | O(n log n) | O(n) |
 | Merge Sort | Sort 223,983 records by timestamp (Q2) | O(n log n) | O(n) |
-| Binary Search | Find HR >= 150 threshold (Q2) | O(log n) | O(1) |
+| Binary Search | Find HR >= 150 bpm threshold (Q2) | O(log n) | O(1) |
 
-Compared to a naive approach (linear scan for peak power, unsorted fatigue scan), this solution reduces the search phase from O(n) repeated queries to a single O(log n) lookup after an O(n log n) sort — a significant improvement at this dataset size.
+Compared to a naive approach, this solution reduces the search phase from O(n) repeated queries to a single O(log n) lookup after an O(n log n) sort — a significant improvement at this dataset size.
