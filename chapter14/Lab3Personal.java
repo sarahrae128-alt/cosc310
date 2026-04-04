@@ -17,7 +17,7 @@ public class Lab3Personal {
         System.out.println("Total records loaded: " + records.size());
 
         // Q1: What was the rider's peak power moment of the week?
-        // Approach: mergeSort by power (index 7), grab index 0
+        // Step1: mergeSort by power (index 7), grab index 0
         System.out.println("\n Peak Power Moment");
 
         BikeDataRecord.sortCriteria = 7; // sort by power (watts)
@@ -40,23 +40,21 @@ public class Lab3Personal {
         }
 
         // Q2: When did the rider show signs of fatigue?
-        // Fatigue = heart rate rising while speed is dropping
-        // Approach: mergeSort by timestamp (index 0) to get
-        // chronological order, then binarySearch for a HR
-        // threshold to find the fatigue window, then scan
-        // adjacent records within that window for the pattern
+        // Step1: mergeSort by timestamp (index 0) to get chronological order
+        // Step2: binarySearch for a HR threshold to find the fatigue window 
+            //This tells us roughly when the rider was working hard
+        // Step3: scan adjacent records within that window for the pattern
+            //Look for a window where speed goes down and HR goes up compared to the previous record
     
         System.out.println("\n Q2: Fatigue Detection");
 
         BikeDataRecord.sortCriteria = 0; // sort by timestamp
-        List<BikeDataRecord> sortedByTime = Sorting.mergeSort(records);
+        List<BikeDataRecord> sortedByTime = Sorting.mergeSort(records);// Step1: mergerSort 
 
-        // Step 1: binary search by HR threshold (index 2) to find
-        // the first region where HR is elevated (>=150 bpm)
-        // This tells us roughly when the rider was working hard
+        // Step2: find the first region where HR is elevated (>=150 bpm)
         int hrThreshold = 150;
         ArrayList<BikeDataRecord> highHRRecords = Searching.binarySearch(
-            (ArrayList<BikeDataRecord>) Sorting.mergeSort(records), // sorted by HR for binary search
+            (ArrayList<BikeDataRecord>) Sorting.mergeSort(records), // sorted by HR for binary search 
             hrThreshold, 2
         );
         // Note: the above mergeSort uses sortCriteria=0 still, so we need to re-sort by HR
@@ -65,9 +63,7 @@ public class Lab3Personal {
         highHRRecords = Searching.binarySearch((ArrayList<BikeDataRecord>) sortedByHR, hrThreshold, 2);
         System.out.println("Records with HR >= " + hrThreshold + " bpm: " + highHRRecords.size());
 
-        // Step 2: scan chronological records for the fatigue pattern
-        // Look for a window where speed goes down AND HR goes up
-        // compared to the previous record
+        // Step 3: scan chronological records for the fatigue pattern
         System.out.println("\nScanning for fatigue pattern (speed down + HR up)...");
         int fatigueCount = 0;
         int bestFatigueIdx = -1;
