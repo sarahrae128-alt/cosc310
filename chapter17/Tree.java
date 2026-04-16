@@ -4,25 +4,56 @@ import java.util.ArrayList;
 
 public class Tree<E> {
 
-    protected int size = 0;
-    protected Node<E> root = null;
+    protected int size = 0; // real-time size
+    protected int height = 0; // cached height
+    protected boolean changed = false; // for knowing when we need to recalculate the height
+    protected TreeNode<E> root = null;
 
-    public Tree(E rootdata) {
-        root = new Node<>(null, rootdata);
-        size = 1;
+    public Tree() {
+        size = 0;
     }
 
-    public void addChild(Node<E> parent, Node<E> child) {
+    public Tree(E rootdata) {
+        root = new TreeNode<>(null, rootdata);
+        size = 1;
+        changed = true;
+    }
+
+    // promote the subtree rooted at node to be the root of the whole tree
+    // dangerous b/c if you weren't in the node subtree, you are gone!
+    public void setRoot(TreeNode<E> node) {
+        root = node;
+        size = node.size();
+        changed = true;
+    }
+
+    // return the old root in case programmer wants to
+    // do something with the old root
+    public TreeNode<E> setRoot(E rootData) {
+        TreeNode<E> oldRoot = root;
+        root = new TreeNode<>(null, rootData);
+        size = 1;
+        return oldRoot;
+    }
+
+    public void addChild(TreeNode<E> parent, TreeNode<E> child) {
         // 1. Let the parent know they have a new child
-        parent.addChild(child);
+        if (parent == null) 
+            setRoot(child);
+        else
+            parent.addChild(child);
 
         // 2. Update the size
         size += child.size(); // adding the child node adds all its children, too!
+
+        // 3. Set the flag to recalculate the height
+        changed = true;
     }
 
-    public Node<E> addChild(Node<E> parent, E childData) {
-       Node<E> childNode = new Node<>(parent, childData);
+    public TreeNode<E> addChild(TreeNode<E> parent, E childData) {
+       TreeNode<E> childNode = new TreeNode<>(parent, childData);
        addChild(parent, childNode); 
+       changed = true;
        return childNode;
     }
 
@@ -31,30 +62,80 @@ public class Tree<E> {
         return String.format("%s [size=%d, height=%d]", root.data.toString(), size(), height());
     }
 
-    public Node<E> getRoot() {
+    public TreeNode<E> getRoot() {
         return root;
     }
 
     // find the maximum depth leaf!
-    private int height() {
-        // 1. find all the leaves
-        return -1;
-    }
-
-    private int size() {
-        return size;
-    }    
-    
-    public ArrayList<Node<E>> leaves() {
-        ArrayList<Node<E>> theleaves = new ArrayList<>();
-        if (size()==1) {
-            // handle the highly unusual situation where the root of the tree is the tree's only leaf
-            theleaves.add(root);
-            return theleaves;
+    public int height() {
+        if (!changed) {
+            return height;
         }
 
-        // recursively find the rest of the leaves in an in-order traversal of the tree
+        // 1. find all the leaves
+        ArrayList<TreeNode<E>> leaves = leaves();
+        int themax = Integer.MIN_VALUE;
+        for (TreeNode<E> node : leaves) {
+            int ndepth = node.depth();
+            if (ndepth>themax) {
+                themax = ndepth;
+            }
+        }
 
-        return theleaves;        
+        // update the cache!
+        height = themax;
+        changed = false;
+        return themax;
     }
+
+    public int size() {
+        return size;
+    }    
+
+    protected int recalculateSize() {
+        if (root==null)
+            size = 0;
+        else
+            size = root.size();
+        return size;
+    }
+    
+    public ArrayList<TreeNode<E>> leaves() {
+        // use the recursive helper starting at the root
+        return leafHelper(root);        
+    }
+
+    protected ArrayList<TreeNode<E>> leafHelper(TreeNode<E> n) {
+        ArrayList<TreeNode<E>> theleaves = new ArrayList<>();
+        if (n.children.isEmpty()) {
+            // handle the highly unusual situation where the root of the tree is the tree's only leaf
+            theleaves.add(n);
+            return theleaves;
+        }
+        for (TreeNode<E> child : n.children) {
+            theleaves.addAll(leafHelper(child));
+        }
+        return theleaves;
+    }
+
+    // return true if n1 is an ancestor of n2
+    public boolean ancestor(TreeNode<E> n1, TreeNode<E> n2) {
+        if (n2==root) {
+            return false; // if n2 is the root, impossible to have an ancestor
+        } else if (n1==root) {
+            return true;
+        } else if (n2.parent==n1) {
+            return true;
+        } else {
+            return ancestor(n1, n2.parent);
+        }
+    }
+
+    // return true if n1 is a descendant of n2
+    // use our ancestor method and swap the nodes
+    public boolean descendant(TreeNode<E> n1, TreeNode<E> n2) {
+        return ancestor(n2, n1);
+    }
+
+
 }
